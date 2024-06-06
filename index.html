@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEWS WAVE</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #121212;
+            color: #E0E0E0;
+        }
+        header {
+            background: linear-gradient(90deg, #00C6FF, #0072FF);
+            color: white;
+            padding: 10px 0;
+            text-align: center;
+            font-size: 2em;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+        .sidebar-toggle {
+            font-size: 30px;
+            color: white;
+            background: none;
+            border: none;
+            position: absolute;
+            top: 15px;
+            left: 20px;
+            cursor: pointer;
+            z-index: 1001;
+        }
+        .sidebar-toggle:hover {
+            transform: rotate(90deg);
+        }
+        .search-bar {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            width: 300px;
+        }
+        .search-bar input[type="text"] {
+            width: 100%;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 20px;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+        .search-bar input[type="text"]:focus {
+            outline: none;
+            box-shadow: 0 0 10px #0072FF;
+        }
+        nav {
+            display: flex;
+            justify-content: center;
+            background-color: #222;
+            padding: 10px 0;
+        }
+        nav a {
+            color: white;
+            padding: 14px 20px;
+            text-decoration: none;
+            text-transform: uppercase;
+            transition: color 0.3s, transform 0.3s;
+            position: relative;
+        }
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background-color: #00C6FF;
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+        nav a:hover::after {
+            transform: scaleX(1);
+        }
+        nav a:hover {
+            color: #00C6FF;
+            transform: scale(1.1);
+        }
+        .container {
+            padding: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+        .story-card {
+            background-color: #1E1E1E;
+            border-radius: 10px;
+            padding: 20px;
+            width: 300px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .story-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+        }
+        .story-card img {
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+        }
+        .story-card h2 {
+            color: #00C6FF;
+        }
+        .story-card p {
+            color: #B0B0B0;
+        }
+        .highlight-card {
+            background-color: #2A2A2A;
+            border: 2px solid #00C6FF;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s, box-shadow 0.3s;
+            width: 100%;
+            max-width: 600px;
+        }
+        .highlight-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+        }
+        .highlight-card h2 {
+            color: #00C6FF;
+        }
+        .highlight-card .news-item {
+            margin-bottom: 10px;
+            font-size: 1.1em;
+            color: #B0B0B0;
+        }
+        .highlight-card .news-item span {
+            color: #00C6FF;
+            font-weight: bold;
+        }
+        .highlight-card .news-item strong {
+            color: white;
+        }
+        .highlight-card .read-more {
+            display: inline-block;
+            margin-top: 20px;
+            color: white;
+            background-color: #00C6FF;
+            text-decoration: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            transition: background-color 0.3s, transform 0.3s;
+            cursor: pointer;
+        }
+        .highlight-card .read-more:hover {
+            background-color: #0072FF;
+            transform: scale(1.1);
+        }
+        .collapse {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-out;
+        }
+        .expanded {
+            max-height: 1000px;
+            transition: max-height 0.5s ease-in;
+        }
+        footer {
+            background: linear-gradient(90deg, #00C6FF, #0072FF);
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+            border-top: 2px solid #00C6FF;
+        }
+        footer p {
+            font-size: 16px;
+        }
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: -100%;
+            width: 250px;
+            height: 100%;
+            background: linear-gradient(180deg, #1E1E1E, #121212);
+            color: #E0E0E0;
+            overflow-y: auto;
+            transition: left 0.5s ease, background 0.5s ease;
+            box-shadow: 4px 0 8px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+        }
+        .sidebar.open {
+            left: 0;
+        }
+        .sidebar-header {
+            padding: 20px;
+            background: #222;
+            font-size: 1.2em;
+            font-weight: bold;
+            text-align: center;
+            border-bottom: 1px solid #00C6FF;
+        }
+        .sidebar-menu ul, .sidebar-footer ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+        .sidebar-menu li, .sidebar-footer li {
+            padding: 16px 20px;
+            transition: background 0.3s, color 0.3s;
+        }
+        .sidebar-menu a, .sidebar-footer a {
+            color: #E0E0E0;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            transition: color 0.3s, background 0.3s, transform 0.3s;
+            position: relative;
+        }
+        .sidebar-menu a:hover, .sidebar-footer a:hover {
+            background: #00C6FF;
+            color: #121212;
+        }
+        .sidebar-menu a::before, .sidebar-footer a::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 0;
+            height: 3px;
+            background: #0072FF;
+            transition: width 0.3s ease;
+        }
+        .sidebar-menu a:hover::before, .sidebar-footer a:hover::before {
+            width: 100%;
+        }
+        .sidebar-menu a .icon, .sidebar-footer a .icon {
+            margin-right: 10px;
+        }
+        .notification {
+            background-color: #1E1E1E;
+            color: #E0E0E0;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+            border-left: 5px solid #00C6FF;
+        }
+        @media (max-width: 768px) {
+            .story-card {
+                flex: 0 1 calc(50% - 20px);
+            }
+        }
+        @media (max-width: 480px) {
+            .story-card {
+                flex: 0 1 100%;
+            }
+            .sidebar {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>NEWS WAVE</h1>
+        <button class="sidebar-toggle">&#9776;</button>
+        <div class="search-bar">
+            <input type="text" id="searchInput" placeholder="Search...">
+        </div>
+    </header>
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="Sports.html">Sports</a>
+        <a href="Entertainment.html">Entertainment</a>
+        <a href="Contact us.html">Contact Us</a>
+        <a href="Health.html">Health</a>
+        <a href="Site history.html">Site History</a>
+    </nav>
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <h2>Menu</h2>
+        </div>
+        <div class="sidebar-menu">
+            <ul>
+                <li><a href="index.html"><i class="fas fa-home icon"></i>Home</a></li>
+                <li><a href="#"><i class="fas fa-bell icon"></i>Notifications</a></li>
+                <li><a href="Contact us.html"><i class="fab fa-instagram icon"></i>Message Us</a></li>
+            </ul>
+        </div>
+        <div class="sidebar-footer">
+            <ul>
+                <li><a href="About us.html">About us</a></li>
+            </ul>
+        </div>
+    </div>
+    <div id="home" class="container">
+        <div class="story-card">
+            <img src="images/glen.jpg" alt="glen">
+            <div class="content">
+                <h2>HIT MAN</h2>
+                <p>Glen Powell talks about the preparation for his role in "Hit Man"</p>
+            </div>
+        </div>
+        <div class="story-card">
+            <img src="images/low.jpg" alt="low">
+            <div class="content">
+                <h2>Jennifer Lopez cancels tour</h2>
+                <p>Jennifer Lopez cancels tour to be with family, amid rumors of trouble in her marriage to Ben Affleck</p>
+            </div>
+        </div>
+        <div class="story-card">
+            <img src="images/seri.jpg" alt="seri">
+            <div class="content">
+                <h2>Russia's foreign minister visits Africa</h2>
+                <p>Sergey Lavrov arrived in Guinea on Monday, as part of a fresh push for support for Russia's war with Ukraine</p>
+            </div>
+        </div>
+        <div class="story-card">
+            <img src="images/ju.jpg" alt="ju">
+            <div class="content">
+                <h2>German national soccer coach calls out a racist poll</h2>
+                <p>German national soccer coach Julian Nagelsmann condemns ‘racist’ poll which asked if team has enough White players</p>
+            </div>
+        </div>
+        <div class="highlight-card">
+            <h2>Latest & Trending News</h2>
+            <p>For the latest news on all topics from entertainment to sports to mental health.</p>
+            <div id="extraContent" class="collapse">
+                <p class="news-item"><span>Trending</span>: <strong>P DIDDY RELEASES AN APOLOGY VIDEO TO THE PRESS</strong></p>
+                <p class="news-item"><span>Trending</span>: <strong>TAYLOR SWIFT AND BILLIE EILISH BATTLE FOR THE TOP OF THE BILLBOARD CHARTS</strong></p>
+                <p class="news-item"><span>Trending</span>: <strong>THERAPIST IN NEW JERSEY ARRESTED FOR OVERDOSING PATIENTS ON XANAX</strong></p>
+            </div>
+            <span class="read-more" onclick="toggleReadMore(this)">Read More</span>
+        </div>
+    </div>
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 News Wave. All rights reserved.</p>
+        </div>
+    </footer>
+    <script>
+        document.querySelector('.sidebar-toggle').addEventListener('click', function() {
+            document.querySelector('.sidebar').classList.toggle('open');
+        });
+
+        function toggleReadMore(element) {
+            const content = document.getElementById('extraContent');
+            if (content.classList.contains('expanded')) {
+                content.classList.remove('expanded');
+                element.textContent = 'Read More';
+            } else {
+                content.classList.add('expanded');
+                element.textContent = 'See Less';
+            }
+        }
+
+        // Search function
+        document.getElementById('searchInput').addEventListener('input', function() {
+            const query = this.value.toLowerCase();
+            const stories = document.querySelectorAll('.story-card, .highlight-card');
+            stories.forEach(story => {
+                const title = story.querySelector('h2').textContent.toLowerCase();
+                const description = story.querySelector('p').textContent.toLowerCase();
+                if (title.includes(query) || description.includes(query)) {
+                    story.style.display = '';
+                } else {
+                    story.style.display = 'none';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

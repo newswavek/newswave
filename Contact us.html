@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact us- NEWS WAVE</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #121212;
+            color: #E0E0E0;
+        }
+        header {
+            background: linear-gradient(90deg, #00C6FF, #0072FF);
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+            font-size: 2.5em;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        nav {
+            display: flex;
+            justify-content: center;
+            background-color: #222;
+            padding: 10px 0;
+        }
+        nav a {
+            color: white;
+            padding: 14px 20px;
+            text-decoration: none;
+            text-transform: uppercase;
+            transition: color 0.3s;
+            position: relative;
+        }
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background-color: #00C6FF;
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+        nav a:hover::after {
+            transform: scaleX(1);
+        }
+        nav a:hover {
+            color: #00C6FF;
+        }
+        .container {
+            padding: 20px;
+            max-width: 800px;
+            margin: auto;
+        }
+        .card {
+            background-color: #1E1E1E;
+            margin: 20px 0;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+        }
+        .card h2 {
+            margin-top: 0;
+            color: #00C6FF;
+        }
+        .card p {
+            color: #B0B0B0;
+            line-height: 1.6;
+        }
+	form {
+            display: flex;
+            flex-direction: column;
+        }
+        label {
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input[type="text"],
+        input[type="email"],
+        textarea {
+            margin-bottom: 20px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1em;
+        }
+        input[type="submit"] {
+            padding: 15px 20px;
+            border: none;
+            border-radius: 5px;
+            background: linear-gradient(90deg, #FF69B4, #7A288A, #0033FF);
+            color: white;
+            font-size: 1.2em;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        input[type="submit"]:hover {
+            background: linear-gradient(90deg, #0033FF, #7A288A, #FF69B4);
+        }
+        .contact-info {
+            display: flex;
+            flex-direction: column;
+            margin-top: 20px;
+        }
+        .contact-info div {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .contact-info div img {
+            margin-right: 10px;
+        }
+        .contact-info div span {
+            font-size: 1.1em;
+        }
+        @media (max-width: 768px) {
+            .story-card {
+                flex: 0 1 calc(50% - 20px);
+            }
+        }
+        @media (max-width: 480px) {
+            .story-card {
+                flex: 0 1 100%;
+            }
+        }
+        .read-more {
+            display: inline-block;
+            padding: 10px 15px;
+            margin-top: 10px;
+            color: white;
+            background-color: #00C6FF;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+        .read-more:hover {
+            background-color: #0072FF;
+        }
+        .collapse {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-out;
+        }
+        .expanded {
+            max-height: 1000px;
+            transition: max-height 0.5s ease-in;
+        }
+        footer {
+            background: linear-gradient(90deg, #00C6FF, #0072FF);
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+            border-top: 2px solid #00C6FF;
+        }
+        footer p {
+            font-size: 16px;
+        }
+        .comment-box-container {
+            background-color: #1E1E1E;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            margin-top: 20px;
+        }
+        .comment-box-container h2 {
+            color: #00C6FF;
+            text-align: center;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #B0B0B0;
+        }
+        .form-group input[type="text"],
+        .form-group input[type="email"],
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #444;
+            border-radius: 5px;
+            background-color: #333;
+            color: #E0E0E0;
+            font-size: 1em;
+        }
+        .post-button {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 5px;
+            background: linear-gradient(90deg, #00C6FF, #0072FF);
+            color: white;
+            font-size: 1.2em;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .post-button:hover {
+            background: linear-gradient(90deg, #0072FF, #00C6FF);
+        }
+        .comment {
+            background-color: #2C2C2C;
+            border: 1px solid #444;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+        .comment strong {
+            color: #00C6FF;
+        }
+        .comment p {
+            margin: 0;
+        }
+        .reply-button {
+            color: #00C6FF;
+            cursor: pointer;
+            font-size: 0.9em;
+            margin-top: 10px;
+            display: inline-block;
+        }
+        .reply-form {
+            display: none;
+            margin-top: 10px;
+        }
+        .reply-form .form-group {
+            margin-bottom: 10px;
+        }
+	 /* Styling for like and dislike buttons */
+        .like-dislike-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+        }
+
+        .like-dislike-buttons button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .like-dislike-buttons button:hover {
+            background-color: #00C6FF;
+            color: white;
+        }
+
+        /* Styling for share button */
+        .share-button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            background-color: #1E1E1E;
+            color: white;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .share-button:hover {
+            background-color: #0072FF;
+        }
+.sidebar-toggle {
+            font-size: 30px;
+            color: white;
+            background: none;
+            border: none;
+            position: absolute;
+            top: 15px;
+            left: 20px;
+            cursor: pointer;
+            z-index: 1001;
+        }
+        .sidebar-toggle:hover {
+            transform: rotate(90deg);
+        }
+        .search-bar {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            width: 300px;
+        }
+        .search-bar input[type="text"] {
+            width: 100%;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 20px;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+        .search-bar input[type="text"]:focus {
+            outline: none;
+            box-shadow: 0 0 10px #0072FF;
+        }
+	.sidebar {
+            position: fixed;
+            top: 0;
+            left: -100%;
+            width: 250px;
+            height: 100%;
+            background: linear-gradient(180deg, #1E1E1E, #121212);
+            color: #E0E0E0;
+            overflow-y: auto;
+            transition: left 0.5s ease, background 0.5s ease;
+            box-shadow: 4px 0 8px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+        }
+        .sidebar.open {
+            left: 0;
+        }
+        .sidebar-header {
+            padding: 20px;
+            background: #222;
+            font-size: 1.2em;
+            font-weight: bold;
+            text-align: center;
+            border-bottom: 1px solid #00C6FF;
+        }
+        .sidebar-menu ul, .sidebar-footer ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+        .sidebar-menu li, .sidebar-footer li {
+            padding: 16px 20px;
+            transition: background 0.3s, color 0.3s;
+        }
+        .sidebar-menu a, .sidebar-footer a {
+            color: #E0E0E0;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            transition: color 0.3s, background 0.3s, transform 0.3s;
+            position: relative;
+        }
+        .sidebar-menu a:hover, .sidebar-footer a:hover {
+            background: #00C6FF;
+            color: #121212;
+        }
+        .sidebar-menu a::before, .sidebar-footer a::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 0;
+            height: 3px;
+            background: #0072FF;
+            transition: width 0.3s ease;
+        }
+        .sidebar-menu a:hover::before, .sidebar-footer a:hover::before {
+            width: 100%;
+        }
+        .sidebar-menu a .icon, .sidebar-footer a .icon {
+            margin-right: 10px;
+        }
+        @media (max-width: 768px) {
+            .main-content {
+                flex-direction: column;
+            }
+            .content {
+                margin-left: 0;
+            }
+        }
+        @media (max-width: 480px) {
+            .sidebar {
+                width: 100%;
+            }
+        }
+
+    </style>
+</head>
+<body>
+    <header>
+        <h1>NEWS WAVE</h1>
+	  <button class="sidebar-toggle">&#9776;</button>
+        <div class="search-bar">
+            <input type="text" id="searchInput" placeholder="Search...">
+        </div>
+    </header>
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="Sports.html">Sports</a>
+        <a href="Entertainment.html">Entertainment</a>
+        <a href="Contact us.html">Contact Us</a>
+        <a href="Health.html">Health</a>
+        <a href="Site History.html">Site History</a>
+    </nav>
+<div class="sidebar">
+        <div class="sidebar-header">
+            <h2>Menu</h2>
+        </div>
+       
+      <div class="sidebar-menu">
+            <ul>
+                <li><a href="index.html"><i class="fas fa-home icon"></i>Home</a></li>
+                <li><a href="#"><i class="fas fa-bell icon"></i>Notifications</a></li>
+                <li><a href="Contact us.html"><i class="fab fa-instagram icon"></i>Message Us</a></li>
+            </ul>
+        </div>
+        <div class="sidebar-footer">
+            <ul>
+                <li><a href="About us.html">About us</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="card">
+            <h2>Contact Us</h2>
+            <p>Have questions or feedback? Reach out to us through our contact form or via email.</p>
+            <form action="#" method="post">
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name" required>
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required>
+                <label for="message">Message:</label>
+                <textarea id="message" name="message" rows="4" required></textarea>
+                <input type="submit" value="Submit">
+            </form>
+            <div class="contact-info">
+<h2>Location:</h2>
+<br>                
+<div>
+                    <img src="images/l.jpg" alt="l" width="24" height="24">
+                    <span>90021 kenyatta drive,BCA HILLS, Limbe, Blantrye</span>
+                </div><br>
+<h2> Email:</h2>
+<br>                <div>
+
+                    <img src="images/m.jpg" alt="m" width="24" height="24">
+                    <span>kikikansasi@gmail.com</span>
+                </div><br>
+<h2> Phone number: </h2>
+<br>
+                <div>
+                    <img src="images/p.jpg" alt="Phone Icon" width="24" height="24">
+                    <span>+265 (0) 884-7433-89</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 News Wave. All rights reserved.</p>
+        </div>
+	</div>
+    </footer>
+
+    <script>
+	function toggleReadMore(storyId, element) {
+            const content = document.getElementById(storyId);
+            if (content.classList.contains('expanded')) {
+                content.classList.remove('expanded');
+                element.textContent = 'Read More';
+            } else {
+                content.classList.add('expanded');
+                element.textContent = 'Show Less';
+            }
+        }
+
+        document.querySelectorAll('[id^="commentForm"]').forEach((form, index) => {
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const name = form.querySelector('input[name="name"]').value;
+                const comment = form.querySelector('textarea[name="comment"]').value;
+                const commentSection = document.getElementById('commentSection' + (index + 1));
+                const newComment = document.createElement('div');
+                newComment.classList.add('comment');
+                newComment.innerHTML = `<strong>${name}</strong><p>${comment}</p>`;
+                commentSection.appendChild(newComment);
+                form.reset();
+            });
+        });
+
+	 // Like/dislike functionality for stories
+        const storyLikes = [0, 0, 0, 0]; // Initialize with 0 likes for each story
+        const storyDislikes = [0, 0, 0, 0]; // Initialize with 0 dislikes for each story
+
+        function toggleLike(storyId) {
+            storyLikes[storyId - 1]++;
+            updateLikesDislikes(storyId);
+        }
+
+        function toggleDislike(storyId) {
+            storyDislikes[storyId - 1]++;
+            updateLikesDislikes(storyId);
+        }
+
+        function updateLikesDislikes(storyId) {
+            const likeCount = document.getElementById(`likeCount${storyId}`);
+            const dislikeCount = document.getElementById(`dislikeCount${storyId}`);
+
+            likeCount.textContent = storyLikes[storyId - 1];
+            dislikeCount.textContent = storyDislikes[storyId - 1];
+        }
+
+        // Sharing functionality for stories
+        function shareStory(storyTitle) {
+            // Your sharing logic here, e.g., open a modal or share via social media
+            alert(`Share "${storyTitle}"`);
+        }
+        // Like/dislike functionality for comments
+        function toggleCommentLike(commentId) {
+            const commentLikes = document.getElementById(`commentLikes${commentId}`);
+            const currentLikes = parseInt(commentLikes.textContent);
+
+            if (isNaN(currentLikes)) {
+                commentLikes.textContent = 1;
+            } else {
+                commentLikes.textContent = currentLikes + 1;
+            }
+        }
+// Toggle reply form visibility
+function toggleReply(commentId) {
+    const replyForm = document.getElementById(`replyForm${commentId}`);
+    replyForm.style.display = (replyForm.style.display === 'none') ? 'block' : 'none';
+}
+
+// Post reply function
+function postReply(commentId) {
+    const replyName = document.getElementById(`replyName${commentId}`).value;
+    const replyComment = document.getElementById(`replyComment${commentId}`).value;
+    const commentSection = document.getElementById(`commentSection${commentId}`);
+    const newReply = document.createElement('div');
+    newReply.classList.add('reply');
+    newReply.innerHTML = `<strong>${replyName}</strong>: ${replyComment}`;
+    commentSection.appendChild(newReply);
+    // Clear reply form after posting
+    document.getElementById(`replyForm${commentId}`).reset();
+}
+ document.querySelector('.sidebar-toggle').addEventListener('click', function() {
+            document.querySelector('.sidebar').classList.toggle('open');
+        });
+// Search function
+        document.getElementById('searchInput').addEventListener('input', function() {
+            const query = this.value.toLowerCase();
+            const stories = document.querySelectorAll('.story-card, .highlight-card');
+            stories.forEach(story => {
+                const title = story.querySelector('h2').textContent.toLowerCase();
+                const description = story.querySelector('p').textContent.toLowerCase();
+                if (title.includes(query) || description.includes(query)) {
+                    story.style.display = '';
+                } else {
+                    story.style.display = 'none';
+                }
+            });
+        });
+
+
+    </script>
+</body>
+</html>

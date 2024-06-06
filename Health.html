@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mental Health- NEWS WAVE</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #121212;
+            color: #E0E0E0;
+        }
+        header {
+            background: linear-gradient(90deg, #00C6FF, #0072FF);
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+            font-size: 2.5em;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        nav {
+            display: flex;
+            justify-content: center;
+            background-color: #222;
+            padding: 10px 0;
+        }
+        nav a {
+            color: white;
+            padding: 14px 20px;
+            text-decoration: none;
+            text-transform: uppercase;
+            transition: color 0.3s;
+            position: relative;
+        }
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background-color: #00C6FF;
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+        nav a:hover::after {
+            transform: scaleX(1);
+        }
+        nav a:hover {
+            color: #00C6FF;
+        }
+        .container {
+            padding: 20px;
+            max-width: 800px;
+            margin: auto;
+        }
+        .card {
+            background-color: #1E1E1E;
+            margin: 20px 0;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+        }
+        .card h2 {
+            margin-top: 0;
+            color: #00C6FF;
+        }
+        .card p {
+            color: #B0B0B0;
+            line-height: 1.6;
+        }
+        .read-more {
+            display: inline-block;
+            padding: 10px 15px;
+            margin-top: 10px;
+            color: white;
+            background-color: #00C6FF;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+        .read-more:hover {
+            background-color: #0072FF;
+        }
+        .collapse {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-out;
+        }
+        .expanded {
+            max-height: 1000px;
+            transition: max-height 0.5s ease-in;
+        }
+        footer {
+            background: linear-gradient(90deg, #00C6FF, #0072FF);
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+            border-top: 2px solid #00C6FF;
+        }
+        footer p {
+            font-size: 16px;
+        }
+        .comment-box-container {
+            background-color: #1E1E1E;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            margin-top: 20px;
+        }
+        .comment-box-container h2 {
+            color: #00C6FF;
+            text-align: center;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #B0B0B0;
+        }
+        .form-group input[type="text"],
+        .form-group input[type="email"],
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #444;
+            border-radius: 5px;
+            background-color: #333;
+            color: #E0E0E0;
+            font-size: 1em;
+        }
+        .post-button {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 5px;
+            background: linear-gradient(90deg, #00C6FF, #0072FF);
+            color: white;
+            font-size: 1.2em;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .post-button:hover {
+            background: linear-gradient(90deg, #0072FF, #00C6FF);
+        }
+        .comment {
+            background-color: #2C2C2C;
+            border: 1px solid #444;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+        .comment strong {
+            color: #00C6FF;
+        }
+        .comment p {
+            margin: 0;
+        }
+        .reply-button {
+            color: #00C6FF;
+            cursor: pointer;
+            font-size: 0.9em;
+            margin-top: 10px;
+            display: inline-block;
+        }
+        .reply-form {
+            display: none;
+            margin-top: 10px;
+        }
+        /* Styling for like and dislike buttons */
+        .like-dislike-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+        }
+        .like-dislike-buttons button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .like-dislike-buttons button:hover {
+            background-color: #00C6FF;
+            color: white;
+        }
+        .like-button i,
+        .dislike-button i {
+            margin-right: 5px;
+        }
+        .like-count, .dislike-count, .share-count {
+            margin-left: 10px;
+            font-size: 0.9em;
+        }
+        /* Styling for share button */
+        .share-button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            background-color: #1E1E1E;
+            color: white;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .share-button:hover {
+            background-color: #0072FF;
+        }
+	.sidebar-toggle {
+            font-size: 30px;
+            color: white;
+            background: none;
+            border: none;
+            position: absolute;
+            top: 15px;
+            left: 20px;
+            cursor: pointer;
+            z-index: 1001;
+        }
+        .sidebar-toggle:hover {
+            transform: rotate(90deg);
+        }
+        .search-bar {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            width: 300px;
+        }
+        .search-bar input[type="text"] {
+            width: 100%;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 20px;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+        .search-bar input[type="text"]:focus {
+            outline: none;
+            box-shadow: 0 0 10px #0072FF;
+        }
+	.sidebar {
+            position: fixed;
+            top: 0;
+            left: -100%;
+            width: 250px;
+            height: 100%;
+            background: linear-gradient(180deg, #1E1E1E, #121212);
+            color: #E0E0E0;
+            overflow-y: auto;
+            transition: left 0.5s ease, background 0.5s ease;
+            box-shadow: 4px 0 8px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+        }
+        .sidebar.open {
+            left: 0;
+        }
+        .sidebar-header {
+            padding: 20px;
+            background: #222;
+            font-size: 1.2em;
+            font-weight: bold;
+            text-align: center;
+            border-bottom: 1px solid #00C6FF;
+        }
+        .sidebar-menu ul, .sidebar-footer ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+        .sidebar-menu li, .sidebar-footer li {
+            padding: 16px 20px;
+            transition: background 0.3s, color 0.3s;
+        }
+        .sidebar-menu a, .sidebar-footer a {
+            color: #E0E0E0;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            transition: color 0.3s, background 0.3s, transform 0.3s;
+            position: relative;
+        }
+        .sidebar-menu a:hover, .sidebar-footer a:hover {
+            background: #00C6FF;
+            color: #121212;
+        }
+        .sidebar-menu a::before, .sidebar-footer a::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 0;
+            height: 3px;
+            background: #0072FF;
+            transition: width 0.3s ease;
+        }
+        .sidebar-menu a:hover::before, .sidebar-footer a:hover::before {
+            width: 100%;
+        }
+        .sidebar-menu a .icon, .sidebar-footer a .icon {
+            margin-right: 10px;
+        }
+        @media (max-width: 768px) {
+            .main-content {
+                flex-direction: column;
+            }
+            .content {
+                margin-left: 0;
+            }
+        }
+        @media (max-width: 480px) {
+            .sidebar {
+                width: 100%;
+            }
+        }
+
+    </style>
+</head>
+<body>
+    <header>
+        <h1>NEWS WAVE</h1>
+	  <button class="sidebar-toggle">&#9776;</button>
+        <div class="search-bar">
+            <input type="text" id="searchInput" placeholder="Search...">
+        </div>
+    </header>
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="Sports.html">Sports</a>
+        <a href="Entertainment.html">Entertainment</a>
+        <a href="Contact us.html">Contact Us</a>
+        <a href="Health.html">Health</a>
+        <a href="Site history.html">Site History</a>
+    </nav>
+<div class="sidebar">
+        <div class="sidebar-header">
+            <h2>Menu</h2>
+        </div>
+       
+      <div class="sidebar-menu">
+            <ul>
+                <li><a href="index.html"><i class="fas fa-home icon"></i>Home</a></li>
+                <li><a href="#"><i class="fas fa-bell icon"></i>Notifications</a></li>
+                <li><a href="Contact us.html"><i class="fab fa-instagram icon"></i>Message Us</a></li>
+            </ul>
+        </div>
+        <div class="sidebar-footer">
+            <ul>
+                <li><a href="About us.html">About us</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="card">
+            <h2>Mental Health Section</h2>
+            <p>Get the latest on all things mental health to keep you informed and aware on how to care for your mental health.</p>
+        </div>
+
+        <div class="card">
+            <h2>Celebrity Opens Up About Mental Health Struggles</h2>
+            <img src="images/simone.jpg" alt="simone" style="display: block; margin: auto; width: 60%; border-radius: 10px;">
+            <div class="content">
+                <p class="story-summary">A popular local celebrity, known for their music and acting career, spoke publicly about their struggles with depression and anxiety.</p>
+                <div class="collapse" id="story1">
+                    <p>In a candid interview, they shared about their experiences, from feeling overwhelmed by the pressures of fame to struggling with self-doubt and low self-esteem.
+                    The celebrity's bravery inspired many to share their own stories and seek help. 
+
+                    <br><br>
+                    Fans took to social media to thank them for speaking out, saying that their honesty had given them the courage to face their own struggles. One fan wrote, "I've been struggling with depression for years, but hearing that someone I admire has gone through the same thing makes me feel less alone."
+                    The celebrity's decision to speak out also sparked a wider conversation about mental health in the entertainment industry. 
+
+                    <br><br>
+                    Many others in the industry began to share their own struggles, highlighting the need for better support and resources. The celebrity's bravery has shown that even in the spotlight, it's okay to not be okay, and that seeking help is a sign of strength, not weakness.
+                    The celebrity's interview also highlighted the importance of self-care and seeking help. They spoke about the therapy sessions that had helped them cope with their struggles, and the support of loved ones that had kept them going. Their message was clear: mental health matters, and seeking help is essential to living a happy, healthy life.
+                    </p>
+                    <div class="comment-box-container">
+                        <h2>Leave a Comment</h2>
+                        <div class="form-group">
+                            <label for="name1">Name:</label>
+                            <input type="text" id="name1" name="name">
+                        </div>
+                        <div class="form-group">
+                            <label for="email1">Email:</label>
+                            <input type="email" id="email1" name="email">
+                        </div>
+                        <div class="form-group">
+                            <label for="comment1">Comment:</label>
+                            <textarea id="comment1" name="comment" rows="5"></textarea>
+                        </div>
+                        <button class="post-button" onclick="postComment(1)">Post Comment</button>
+                        <div id="comments-section1"></div>
+                    </div>
+                </div>
+                <a href="javascript:void(0);" class="read-more" onclick="toggleReadMore('story1', this)">Read More</a>
+                <div class="like-dislike-buttons">
+                    <button class="like-button" onclick="likeStory(1)">
+                        <i class="fas fa-thumbs-up"></i> Like
+                        <span class="like-count" id="like-count-1">0</span>
+                    </button>
+                    <button class="dislike-button" onclick="dislikeStory(1)">
+                        <i class="fas fa-thumbs-down"></i> Dislike
+                        <span class="dislike-count" id="dislike-count-1">0</span>
+                    </button>
+                    <button class="share-button" onclick="shareStory(1)">
+                        <i class="fas fa-share"></i> Share
+                        <span class="share-count" id="share-count-1">0</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>Mental Health Support Group Formed in Blantyre</h2>
+            <img src="images/mental.jpg" alt="mental" style="display: block; margin: auto; width: 60%; border-radius: 10px;">
+            <div class="content">
+                <p class="story-summary">A group of individuals struggling with mental health issues came together to form a support group in Blantyre.</p>
+                <div class="collapse" id="story2">
+                    <p>The group, which meets weekly, provides a safe space for members to share their experiences and receive support from others who understand their struggles.
+                    The group was founded by a local resident who had struggled with depression and anxiety for years. 
+                    <br><br>
+                    She found solace in online support groups, but longed for a face-to-face community where she could connect with others who shared her struggles. With the help of a local therapist, she established the support group, which has grown to include over 20 members.
+                    The group's meetings are structured around a theme or topic, such as coping with stress or managing relationships.
+                    <br><br>
+                    Members share their experiences, offer advice, and provide emotional support. The group's leader, a trained therapist, facilitates the discussions and ensures that everyone feels heard and respected.
+                    Members have reported feeling a sense of belonging and connection that they hadn't experienced before. One member, who had struggled with social anxiety, said, "I used to feel like I was alone in my struggles, but this group has shown me that I'm not alone. We're all in this together."
+
+                    <br><br>
+                    The group has also provided a safe space for members to share their struggles without fear of judgment. One member, who had been struggling with suicidal thoughts, said, "I was ashamed to talk about my feelings, but this group has shown me that it's okay to not be okay. They've helped me find resources and support that I didn't know existed."
+                    The group's impact has extended beyond its members, too. 
+                    <br><br>
+                    Family and friends of members have reported seeing a positive change in their loved ones, and some have even joined the group themselves. The group's leader notes, "We're not just a support group; we're a community. We're changing the conversation around mental health, one meeting at a time."
+                    As the group continues to grow, its members are looking to expand their reach. They're planning to partner with local organizations to offer workshops and resources to the wider community. Their goal is to create a mental health movement that spreads across the country, one support group at a time.
+                    </p>
+                    <div class="comment-box-container">
+                        <h2>Leave a Comment</h2>
+                        <div class="form-group">
+                            <label for="name2">Name:</label>
+                            <input type="text" id="name2" name="name">
+                        </div>
+                        <div class="form-group">
+                            <label for="email2">Email:</label>
+                            <input type="email" id="email2" name="email">
+                        </div>
+                        <div class="form-group">
+                            <label for="comment2">Comment:</label>
+                            <textarea id="comment2" name="comment" rows="5"></textarea>
+                        </div>
+                        <button class="post-button" onclick="postComment(2)">Post Comment</button>
+                        <div id="comments-section2"></div>
+                    </div>
+                </div>
+                <a href="javascript:void(0);" class="read-more" onclick="toggleReadMore('story2', this)">Read More</a>
+                <div class="like-dislike-buttons">
+                    <button class="like-button" onclick="likeStory(2)">
+                        <i class="fas fa-thumbs-up"></i> Like
+                        <span class="like-count" id="like-count-2">0</span>
+                    </button>
+                    <button class="dislike-button" onclick="dislikeStory(2)">
+                        <i class="fas fa-thumbs-down"></i> Dislike
+                        <span class="dislike-count" id="dislike-count-2">0</span>
+                    </button>
+                    <button class="share-button" onclick="shareStory(2)">
+                        <i class="fas fa-share"></i> Share
+                        <span class="share-count" id="share-count-2">0</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>Free Mental Health Services Offered at Local Clinic</h2>
+            <img src="images/mzu.jpg" alt="mzu" style="display: block; margin: auto; width: 60%; border-radius: 10px;">
+            <div class="content">
+                <p class="story-summary">A healthcare clinic in Mzuzu offered free mental health services for the month of May.</p>
+                <div class="collapse" id="story3">
+                    <p>
+                    Providing access to counseling and therapy for those who cannot afford it. The clinic saw an influx of patients seeking help, demonstrating the need for affordable mental health services in the community.
+                    The clinic's decision to offer free services was inspired by the growing need for mental health support in the community.
+
+                    <br><br>
+                    The clinic's director noted, "We've seen a significant increase in patients struggling with mental health issues, but many can't afford the services they need. We wanted to do something to help."
+                    The clinic's services were offered by trained therapists and counselors, who provided individual and group sessions. 
+
+                    <br><br>
+                    Patients were able to receive support for a range of issues, from anxiety and depression to trauma and relationships. The clinic also offered resources and referrals for those who needed ongoing support.
+                    The clinic's offer of free services was met with gratitude from the community. 
+
+                    <br><br>
+                    Patients reported feeling seen and heard, and many said that the services had been a lifeline. One patient, who had struggled with depression for years, said, "I've never been able to afford therapy before, but thanks to the clinic, I've been able to get the help I need. I feel like I've finally found hope."
+                    The clinic's initiative has inspired other healthcare providers to follow suit, highlighting the need for affordable mental health services across the country. As the clinic's director noted, "Mental health is just as important as physical health, and it's time we start treating it that way."
+                    </p>
+                    <div class="comment-box-container">
+                        <h2>Leave a Comment</h2>
+                        <div class="form-group">
+                            <label for="name3">Name:</label>
+                            <input type="text" id="name3" name="name">
+                        </div>
+                        <div class="form-group">
+                            <label for="email3">Email:</label>
+                            <input type="email" id="email3" name="email">
+                        </div>
+                        <div class="form-group">
+                            <label for="comment3">Comment:</label>
+                            <textarea id="comment3" name="comment" rows="5"></textarea>
+                        </div>
+                        <button class="post-button" onclick="postComment(3)">Post Comment</button>
+                        <div id="comments-section3"></div>
+                    </div>
+                </div>
+                <a href="javascript:void(0);" class="read-more" onclick="toggleReadMore('story3', this)">Read More</a>
+                <div class="like-dislike-buttons">
+                    <button class="like-button" onclick="likeStory(3)">
+                        <i class="fas fa-thumbs-up"></i> Like
+                        <span class="like-count" id="like-count-3">0</span>
+                    </button>
+                    <button class="dislike-button" onclick="dislikeStory(3)">
+                        <i class="fas fa-thumbs-down"></i> Dislike
+                        <span class="dislike-count" id="dislike-count-3">0</span>
+                    </button>
+                    <button class="share-button" onclick="shareStory(3)">
+                        <i class="fas fa-share"></i> Share
+                        <span class="share-count" id="share-count-3">0</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+            </div>
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 News Wave. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+  // Utility function to get and set counts from localStorage
+        function getCounts(storyId) {
+            return JSON.parse(localStorage.getItem(`story-${storyId}`)) || { likeCount: 0, dislikeCount: 0, shareCount: 0 };
+        }
+
+        function setCounts(storyId, counts) {
+            localStorage.setItem(`story-${storyId}`, JSON.stringify(counts));
+        }
+
+        // Initialize counts from localStorage
+        document.addEventListener('DOMContentLoaded', () => {
+            [1, 2, 3, 4, 5].forEach(storyId => {
+                const counts = getCounts(storyId);
+                document.getElementById(`like-count-${storyId}`).textContent = counts.likeCount;
+                document.getElementById(`dislike-count-${storyId}`).textContent = counts.dislikeCount;
+                document.getElementById(`share-count-${storyId}`).textContent = counts.shareCount;
+            });
+        });
+
+        // Like, dislike, and share functions
+        function likeStory(storyId) {
+            const counts = getCounts(storyId);
+            counts.likeCount += 1;
+            document.getElementById(`like-count-${storyId}`).textContent = counts.likeCount;
+            setCounts(storyId, counts);
+        }
+
+        function dislikeStory(storyId) {
+            const counts = getCounts(storyId);
+            counts.dislikeCount += 1;
+            document.getElementById(`dislike-count-${storyId}`).textContent = counts.dislikeCount;
+            setCounts(storyId, counts);
+        }
+
+        function shareStory(storyId) {
+            const counts = getCounts(storyId);
+            counts.shareCount += 1;
+            document.getElementById(`share-count-${storyId}`).textContent = counts.shareCount;
+            setCounts(storyId, counts);
+        }
+
+        // Read more toggle function
+        function toggleReadMore(storyId, element) {
+            const content = document.getElementById(storyId);
+            if (content.classList.contains('expanded')) {
+                content.classList.remove('expanded');
+                element.textContent = 'Read More';
+            } else {
+                content.classList.add('expanded');
+                element.textContent = 'Show Less';
+            }
+        }
+
+        // Post comment function (simplified, does not persist comments)
+        function postComment(storyId) {
+            const name = document.getElementById(`name${storyId}`).value;
+            const email = document.getElementById(`email${storyId}`).value;
+            const commentText = document.getElementById(`comment${storyId}`).value;
+            const commentsSection = document.getElementById(`comments-section${storyId}`);
+
+            if (name && email && commentText) {
+                const comment = document.createElement('div');
+                comment.classList.add('comment');
+                comment.innerHTML = `<strong>${name}</strong><p>${commentText}</p>`;
+                commentsSection.appendChild(comment);
+
+                document.getElementById(`name${storyId}`).value = '';
+                document.getElementById(`email${storyId}`).value = '';
+                document.getElementById(`comment${storyId}`).value = '';
+            } else {
+                alert('Please fill out all fields.');
+            }
+        }
+	 document.querySelector('.sidebar-toggle').addEventListener('click', function() {
+            document.querySelector('.sidebar').classList.toggle('open');
+        });
+// Search function
+        document.getElementById('searchInput').addEventListener('input', function() {
+            const query = this.value.toLowerCase();
+            const stories = document.querySelectorAll('.story-card, .highlight-card');
+            stories.forEach(story => {
+                const title = story.querySelector('h2').textContent.toLowerCase();
+                const description = story.querySelector('p').textContent.toLowerCase();
+                if (title.includes(query) || description.includes(query)) {
+                    story.style.display = '';
+                } else {
+                    story.style.display = 'none';
+                }
+            });
+        });
+
+    </script>
+</body>
+</html>

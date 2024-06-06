@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Entertainment - NEWS WAVE</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #121212;
+            color: #E0E0E0;
+        }
+        header {
+            background: linear-gradient(90deg, #00C6FF, #0072FF);
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+            font-size: 2.5em;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        nav {
+            display: flex;
+            justify-content: center;
+            background-color: #222;
+            padding: 10px 0;
+        }
+        nav a {
+            color: white;
+            padding: 14px 20px;
+            text-decoration: none;
+            text-transform: uppercase;
+            transition: color 0.3s;
+            position: relative;
+        }
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background-color: #00C6FF;
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+        nav a:hover::after {
+            transform: scaleX(1);
+        }
+        nav a:hover {
+            color: #00C6FF;
+        }
+        .container {
+            padding: 20px;
+            max-width: 800px;
+            margin: auto;
+        }
+        .card {
+            background-color: #1E1E1E;
+            margin: 20px 0;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+        }
+        .card h2 {
+            margin-top: 0;
+            color: #00C6FF;
+        }
+        .card p {
+            color: #B0B0B0;
+            line-height: 1.6;
+        }
+        .read-more {
+            display: inline-block;
+            padding: 10px 15px;
+            margin-top: 10px;
+            color: white;
+            background-color: #00C6FF;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+        .read-more:hover {
+            background-color: #0072FF;
+        }
+        .collapse {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-out;
+        }
+        .expanded {
+            max-height: 1000px;
+            transition: max-height 0.5s ease-in;
+        }
+        footer {
+            background: linear-gradient(90deg, #00C6FF, #0072FF);
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+            border-top: 2px solid #00C6FF;
+        }
+        footer p {
+            font-size: 16px;
+        }
+        .comment-box-container {
+            background-color: #1E1E1E;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            margin-top: 20px;
+        }
+        .comment-box-container h2 {
+            color: #00C6FF;
+            text-align: center;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #B0B0B0;
+        }
+        .form-group input[type="text"],
+        .form-group input[type="email"],
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #444;
+            border-radius: 5px;
+            background-color: #333;
+            color: #E0E0E0;
+            font-size: 1em;
+        }
+        .post-button {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 5px;
+            background: linear-gradient(90deg, #00C6FF, #0072FF);
+            color: white;
+            font-size: 1.2em;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .post-button:hover {
+            background: linear-gradient(90deg, #0072FF, #00C6FF);
+        }
+        .comment {
+            background-color: #2C2C2C;
+            border: 1px solid #444;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+        .comment strong {
+            color: #00C6FF;
+        }
+        .comment p {
+            margin: 0;
+        }
+        .reply-button {
+            color: #00C6FF;
+            cursor: pointer;
+            font-size: 0.9em;
+            margin-top: 10px;
+            display: inline-block;
+        }
+        .reply-form {
+            display: none;
+            margin-top: 10px;
+        }
+        .like-dislike-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+        }
+        .like-dislike-buttons button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .like-dislike-buttons button:hover {
+            background-color: #00C6FF;
+            color: white;
+        }
+        .like-button i,
+        .dislike-button i {
+            margin-right: 5px;
+        }
+        .like-count, .dislike-count, .share-count {
+            margin-left: 10px;
+            font-size: 0.9em;
+        }
+        .share-button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            background-color: #1E1E1E;
+            color: white;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .share-button:hover {
+            background-color: #0072FF;
+        }
+	.sidebar-toggle {
+            font-size: 30px;
+            color: white;
+            background: none;
+            border: none;
+            position: absolute;
+            top: 15px;
+            left: 20px;
+            cursor: pointer;
+            z-index: 1001;
+        }
+        .sidebar-toggle:hover {
+            transform: rotate(90deg);
+        }
+        .search-bar {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            width: 300px;
+        }
+        .search-bar input[type="text"] {
+            width: 100%;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 20px;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+        .search-bar input[type="text"]:focus {
+            outline: none;
+            box-shadow: 0 0 10px #0072FF;
+        }
+	.sidebar {
+            position: fixed;
+            top: 0;
+            left: -100%;
+            width: 250px;
+            height: 100%;
+            background: linear-gradient(180deg, #1E1E1E, #121212);
+            color: #E0E0E0;
+            overflow-y: auto;
+            transition: left 0.5s ease, background 0.5s ease;
+            box-shadow: 4px 0 8px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+        }
+        .sidebar.open {
+            left: 0;
+        }
+        .sidebar-header {
+            padding: 20px;
+            background: #222;
+            font-size: 1.2em;
+            font-weight: bold;
+            text-align: center;
+            border-bottom: 1px solid #00C6FF;
+        }
+        .sidebar-menu ul, .sidebar-footer ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+        .sidebar-menu li, .sidebar-footer li {
+            padding: 16px 20px;
+            transition: background 0.3s, color 0.3s;
+        }
+        .sidebar-menu a, .sidebar-footer a {
+            color: #E0E0E0;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            transition: color 0.3s, background 0.3s, transform 0.3s;
+            position: relative;
+        }
+        .sidebar-menu a:hover, .sidebar-footer a:hover {
+            background: #00C6FF;
+            color: #121212;
+        }
+        .sidebar-menu a::before, .sidebar-footer a::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 0;
+            height: 3px;
+            background: #0072FF;
+            transition: width 0.3s ease;
+        }
+        .sidebar-menu a:hover::before, .sidebar-footer a:hover::before {
+            width: 100%;
+        }
+        .sidebar-menu a .icon, .sidebar-footer a .icon {
+            margin-right: 10px;
+        }
+        @media (max-width: 768px) {
+            .main-content {
+                flex-direction: column;
+            }
+            .content {
+                margin-left: 0;
+            }
+        }
+        @media (max-width: 480px) {
+            .sidebar {
+                width: 100%;
+            }
+        }
+
+    </style>
+</head>
+<body>
+    <header>
+        <h1>NEWS WAVE</h1>
+	  <button class="sidebar-toggle">&#9776;</button>
+        <div class="search-bar">
+            <input type="text" id="searchInput" placeholder="Search...">
+        </div>
+    </header>
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="Sports.html">Sports</a>
+        <a href="Entertainment.html">Entertainment</a>
+        <a href="Contact us.html">Contact Us</a>
+        <a href="Health.html">Health</a>
+        <a href="Site history.html">Site History</a>
+    </nav>
+<div class="sidebar">
+        <div class="sidebar-header">
+            <h2>Menu</h2>
+        </div>
+       
+      <div class="sidebar-menu">
+            <ul>
+                <li><a href="index.html"><i class="fas fa-home icon"></i>Home</a></li>
+                <li><a href="#"><i class="fas fa-bell icon"></i>Notifications</a></li>
+                <li><a href="Contact us.html"><i class="fab fa-instagram icon"></i>Message Us</a></li>
+            </ul>
+        </div>
+        <div class="sidebar-footer">
+            <ul>
+                <li><a href="About us.html">About us</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="container">
+        <div class="card">
+            <h2>THE BATTLE FOR THE CHARTS</h2>
+            <img src="images/charts.jpg" alt="charts" style="display: block; margin: auto; width: 60%; border-radius: 10px;">
+            <div class="content">
+                <p class="story-summary">Taylor Swift and Billie Eilish Battle for the #1 on the Billboard Hot 200.</p>
+                <div class="collapse" id="story1">
+                    <p>In the digital age of Pop Music, two reigning queens—Taylor Swift and Billie Eilish—held the charts in their grasp. Their albums, like viral memes, swept across streaming platforms, pulling in millions of listeners. A chart-topping showdown that would echo through the hashtags and playlists of generations.
+                    <br><br>
+                    The New York Times chronicled the Swift-Eilish Cold War. Their fan armies mobilized. Billie’s album danced through Spotify’s Daily Top Songs USA chart, each track amassing over a million spins. Taylor’s loyal subjects clung to their vinyl editions, invoking ancient rituals to keep The Tortured Poets Department atop the Billboard 200 for five weeks straight.
+                    <br><br>
+                    Billie’s fans streamed her album like wildfire, while Taylor’s cult-like followers clung to their AirPods, replaying the dead poets' verses. The scrolls revealed the truth: Taylor Swift’s reign remained unshaken for now. Her followers managed fended off Billie, like a firewall against a digital dragon.
+                    <br><br>
+                    But the war is far from over, with Billie amassing over 25 million new monthly listeners and making her the 4th most listened-to artist in the world, Taylor is sure to feel the heat as streams for "Hit Me Hard and Soft" rise to new-time highs for Billie.
+                    </p>
+                    <div class="comment-box-container">
+                        <h2>Leave a Comment</h2>
+                        <div class="form-group">
+                            <label for="name1">Name:</label>
+                            <input type="text" id="name1" name="name">
+                        </div>
+                        <div class="form-group">
+                            <label for="email1">Email:</label>
+                            <input type="email" id="email1" name="email">
+                        </div>
+                        <div class="form-group">
+                            <label for="comment1">Comment:</label>
+                            <textarea id="comment1" name="comment" rows="5"></textarea>
+                        </div>
+                        <button class="post-button" onclick="postComment(1)">Post Comment</button>
+                        <div id="comments-section1"></div>
+                    </div>
+                </div>
+                <a href="javascript:void(0);" class="read-more" onclick="toggleReadMore('story1', this)">Read More</a>
+                <div class="like-dislike-buttons">
+                    <button class="like-button" onclick="likeStory(1)">
+                        <i class="fas fa-thumbs-up"></i> Like
+                        <span class="like-count" id="like-count-1">0</span>
+                    </button>
+                    <button class="dislike-button" onclick="dislikeStory(1)">
+                        <i class="fas fa-thumbs-down"></i> Dislike
+                        <span class="dislike-count" id="dislike-count-1">0</span>
+                    </button>
+                    <button class="share-button" onclick="shareStory(1)">
+                        <i class="fas fa-share"></i> Share
+                        <span class="share-count" id="share-count-1">0</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <h2>Marvel's Guardians of the Galaxy Vol. 3 Hits Theaters</h2>
+            <img src="images/Guard.jpg" alt="Guard" style="display: block; margin: auto; width: 60%; border-radius: 10px;">
+            <div class="content"> 
+                <p class="story-summary">Marvel's Guardians of the Galaxy Vol. 3, the final installment of the beloved franchise, hit theaters on May 5th.</p>
+                <div class="collapse" id="story2">
+                    <p>The film, directed by James Gunn, follows the Guardians as they face their biggest challenge yet: saving Rocket Raccoon's life. (May 8, 2024)
+The film has received rave reviews for its emotional depth, stunning visuals, and satisfying conclusion to the trilogy. 
+<br><br>
+Fans are praising the cast, particularly Chris Pratt and Bradley Cooper, for their performances.
+The Guardians of the Galaxy franchise has been a staple of the Marvel Cinematic Universe, known for its humor, heart, and nostalgic soundtrack. The third installment is a fitting conclusion to the series, tying up loose ends and giving fans the closure they've been waiting for.
+James Gunn's direction has been praised for its sensitivity and attention to detail, bringing the characters to life in a way that feels authentic and true to the franchise. The film's themes of family, love, and sacrifice are timeless and universal.
+<br><br>
+The Guardians of the Galaxy Vol. 3 is a must-see for fans of the franchise and the Marvel Cinematic Universe. With its stunning visuals, heartwarming moments, and satisfying conclusion, it's a fitting end to a beloved trilogy.
+The film's success is a testament to the power of storytelling and the impact that movies can have on our lives. The Guardians of the Galaxy franchise will be remembered for years to come as a shining example of what makes Marvel so beloved.
+</p>
+                    <div class="comment-box-container">
+                        <h2>Leave a Comment</h2>
+                        <div class="form-group">
+                            <label for="name2">Name:</label>
+                            <input type="text" id="name2" name="name">
+                        </div>
+                        <div class="form-group">
+                            <label for="email2">Email:</label>
+                            <input type="email" id="email2" name="email">
+                        </div>
+                        <div class="form-group">
+                            <label for="comment2">Comment:</label>
+                            <textarea id="comment2" name="comment" rows="5"></textarea>
+                        </div>
+                        <button class="post-button" onclick="postComment(2)">Post Comment</button>
+                        <div id="comments-section2"></div>
+                    </div>
+                </div>
+                <a href="javascript:void(0);" class="read-more" onclick="toggleReadMore('story2', this)">Read More</a>
+                <div class="like-dislike-buttons">
+                    <button class="like-button" onclick="likeStory(2)">
+                        <i class="fas fa-thumbs-up"></i> Like
+                        <span class="like-count" id="like-count-2">0</span>
+                    </button>
+                    <button class="dislike-button" onclick="dislikeStory(2)">
+                        <i class="fas fa-thumbs-down"></i> Dislike
+                        <span class="dislike-count" id="dislike-count-2">0</span>
+                    </button>
+                    <button class="share-button" onclick="shareStory(2)">
+                        <i class="fas fa-share"></i> Share
+                        <span class="share-count" id="share-count-2">0</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+	<div class="card">
+        <h2>Beyoncé's Renaissance World Tour Kicks Off</h2>
+            <img src="images/bee.jpg" alt="bee" style="display: block; margin: auto; width: 60%; border-radius: 10px;">
+            <div class="content"> 
+                <p class="story-summary">Beyoncé's highly anticipated Renaissance World Tour kicked off on May 10th in Stockholm, Sweden.</p>
+                <div class="collapse" id="story3">
+                    <p>The tour, which supports her 2022 album Renaissance, features a mesmerizing stage production and a setlist of hits old and new. Fans are raving about the show, which includes a tribute to her late uncle and a surprise appearance by Jay-Z. (May 12, 2024)
+The tour has been praised for its high-energy performance, stunning visuals, and commitment to inclusivity. 
+<br><br>
+Beyoncé's music has always been a source of empowerment for her fans, and this tour is no exception. With dates scheduled through October, the Renaissance World Tour is a must-see event for music lovers everywhere.
+Beyoncé's impact on the music industry is undeniable, and this tour is a testament to her dedication to her craft. 
+<br><br>
+Her music has inspired countless artists and fans alike, and her live performances are always a testament to her talent and work ethic.
+The Renaissance World Tour is a celebration of music, dance, and self-expression. With its themes of love, freedom, and empowerment, it's an experience that will leave fans feeling uplifted and inspired.
+Beyoncé's music has always been a source of comfort and strength for her fans, and this tour is no exception. 
+<br><br>
+Her commitment to her fans is evident in every aspect of the show, from the stunning costumes to the flawless choreography.
+The Renaissance World Tour is a once-in-a-lifetime experience that fans won't want to miss. With its high-energy performance, stunning visuals, and commitment to inclusivity, it's an event that will be remembered for years to come.
+</p>
+                    <div class="comment-box-container">
+                        <h2>Leave a Comment</h2>
+                        <div class="form-group">
+                            <label for="name3">Name:</label>
+                            <input type="text" id="name3" name="name">
+                        </div>
+                        <div class="form-group">
+                            <label for="email3">Email:</label>
+                            <input type="email" id="email3" name="email">
+                        </div>
+                        <div class="form-group">
+                            <label for="comment3">Comment:</label>
+                            <textarea id="comment3" name="comment" rows="5"></textarea>
+                        </div>
+                        <button class="post-button" onclick="postComment(3)">Post Comment</button>
+                        <div id="comments-section3"></div>
+                    </div>
+                </div>
+                <a href="javascript:void(0);" class="read-more" onclick="toggleReadMore('story3', this)">Read More</a>
+                <div class="like-dislike-buttons">
+                    <button class="like-button" onclick="likeStory(3)">
+                        <i class="fas fa-thumbs-up"></i> Like
+                        <span class="like-count" id="like-count-3">0</span>
+                    </button>
+                    <button class="dislike-button" onclick="dislikeStory(3)">
+                        <i class="fas fa-thumbs-down"></i> Dislike
+                        <span class="dislike-count" id="dislike-count-3">0</span>
+                    </button>
+                    <button class="share-button" onclick="shareStory(3)">
+                        <i class="fas fa-share"></i> Share
+                        <span class="share-count" id="share-count-3">0</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>DRAKE VS KENDRICK LAMAR</h2>  
+            <img src="images/vs.jpg" alt="vs" style="display: block; margin: auto; width: 60%; border-radius: 10px;">
+            <div class="content">
+                <p class="story-summary">The rap battle of the century between Kendrick Lamar and Drake takes a nasty turn.</p>
+                <div class="collapse" id="story4">
+                    <p>It all began with a cryptic verse. Kendrick’s voice echoed through the alleyways, challenging Drake’s throne. His flow was sharp, slicing through the night air like a switchblade. “Tryna strike a chord, and it’s probably A-minor,” he spat, insinuating dark secrets. The crowd leaned in, hungry for blood.
+<br><br>
+Drake, never one to back down, stepped into the spotlight. His mic crackled with electricity. “Taylor Swift is your new top,” he fired back, mocking Kendrick’s boss. “And if you 'boutta drop, she gotta approve.” The crowd gasped. Shots fired, and the war was on.
+<br><br>
+The city buzzed. Fans dissected every syllable. Kendrick dropped “Like That,” a venomous verse that questioned Drake’s integrity. Drake countered with “Push Ups,” belittling Kendrick’s legacy. Streams skyrocketed, and the world held its breath to see who would fire the next shot.
+<br><br>
+But Kendrick wasn’t done. He unleashed “Not Like Us,” a lyrical hurricane. Accusations of domestic violence, secret children, and more—unevidenced but scorching. Drake’s denial echoed across the airwaves, but the damage was done. The rap world was in shock.
+<br><br>
+As the final beat dropped, Kendrick stepped forward. “All in all, Kendrick won this battle,” declared Joseph “JP” Patterson, editor-in-chief of Complex UK. “Both dragged each other to hell with their jabs, but it’s undeniable who came out on top.”
+</p>
+        <div class="comment-box-container">
+                        <h2>Leave a Comment</h2>
+                        <div class="form-group">
+                            <label for="name4">Name:</label>
+                            <input type="text" id="name4" name="name">
+                        </div>
+                        <div class="form-group">
+                            <label for="email4">Email:</label>
+                            <input type="email" id="email4" name="email">
+                        </div>
+                        <div class="form-group">
+                            <label for="comment4">Comment:</label>
+                            <textarea id="comment4" name="comment" rows="5"></textarea>
+                        </div>
+                        <button class="post-button" onclick="postComment(4)">Post Comment</button>
+                        <div id="comments-section4"></div>
+                    </div>
+                </div>
+                <a href="javascript:void(0);" class="read-more" onclick="toggleReadMore('story4', this)">Read More</a>
+                <div class="like-dislike-buttons">
+                    <button class="like-button" onclick="likeStory(4)">
+                        <i class="fas fa-thumbs-up"></i> Like
+                        <span class="like-count" id="like-count-4">0</span>
+                    </button>
+                    <button class="dislike-button" onclick="dislikeStory(4)">
+                        <i class="fas fa-thumbs-down"></i> Dislike
+                        <span class="dislike-count" id="dislike-count-4">0</span>
+                    </button>
+                    <button class="share-button" onclick="shareStory(4)">
+                        <i class="fas fa-share"></i> Share
+                        <span class="share-count" id="share-count-4">0</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>Jungkook and Harry Styles Team Up for Unforgettable Collaboration</h2>
+            <img src="images/j+h.jpg" alt="j+h" style="display: block; margin: auto; width: 60%; border-radius: 10px;">
+            <div class="content">
+                <p class="story-summary">BTS's Jungkook and Harry Styles have joined forces for a brand new song.</p>
+                <div class="collapse" id="story5">
+                    <p>In a surprise move that has left fans reeling, BTS's Jungkook and Harry Styles have joined forces for a brand new song. The highly anticipated collaboration was announced on social media, with a teaser clip that showcased the two superstars working together in the studio.</p>
+
+<p>According to sources close to the project, the song is a fusion of pop and rock, blending Jungkook's signature powerful vocals with Harry's iconic androgynous style. The lyrics are said to explore themes of self-empowerment and individuality, with both artists bringing their unique perspectives to the table.</p>
+
+<p> Fans have been eagerly awaiting this collaboration, with many taking to social media to express their excitement. "This is a dream come true!" wrote one fan on Twitter. "Two of my favorite artists coming together? It's going to be epic!" Another fan added, "I can't wait to see what they've created. It's going to be pure magic!"</p>
+
+<p>The song, titled "Lost in the Moment," is set to drop on June 15th, with a music video that promises to be just as stunning as the song itself. Both Jungkook and Harry have been teasing snippets of the video on their Instagram stories, showing off their impressive dance moves and stylish outfits.</p>
+
+<p>This collaboration marks a new chapter in the careers of both Jungkook and Harry Styles, as they continue to push boundaries and explore new sounds. With their combined talent and charisma, "Lost in the Moment" is shaping up to be one of the biggest hits of the summer.</p>
+
+<p>Stay tuned for more updates on this exciting collaboration, and get ready to experience the magic of Jungkook and Harry Styles coming together in perfect harmony!</p>
+                    <div class="comment-box-container">
+                        <h2>Leave a Comment</h2>
+                        <div class="form-group">
+                            <label for="name5">Name:</label>
+                            <input type="text" id="name5" name="name">
+                        </div>
+                        <div class="form-group">
+                            <label for="email5">Email:</label>
+                            <input type="email" id="email5" name="email">
+                        </div>
+                        <div class="form-group">
+                            <label for="comment5">Comment:</label>
+                            <textarea id="comment5" name="comment" rows="5"></textarea>
+                        </div>
+                        <button class="post-button" onclick="postComment(5)">Post Comment</button>
+                        <div id="comments-section5"></div>
+                    </div>
+                </div>
+                <a href="javascript:void(0);" class="read-more" onclick="toggleReadMore('story5', this)">Read More</a>
+                <div class="like-dislike-buttons">
+                    <button class="like-button" onclick="likeStory(5)">
+                        <i class="fas fa-thumbs-up"></i> Like
+                        <span class="like-count" id="like-count-5">0</span>
+                    </button>
+                    <button class="dislike-button" onclick="dislikeStory(5)">
+                        <i class="fas fa-thumbs-down"></i> Dislike
+                        <span class="dislike-count" id="dislike-count-5">0</span>
+                    </button>
+                    <button class="share-button" onclick="shareStory(5)">
+                        <i class="fas fa-share"></i> Share
+                        <span class="share-count" id="share-count-5">0</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 News Wave. All rights reserved.</p>
+        </div>
+    </footer>
+    <script>
+        // Utility function to get and set counts from localStorage
+        function getCounts(storyId) {
+            return JSON.parse(localStorage.getItem(`story-${storyId}`)) || { likeCount: 0, dislikeCount: 0, shareCount: 0 };
+        }
+
+        function setCounts(storyId, counts) {
+            localStorage.setItem(`story-${storyId}`, JSON.stringify(counts));
+        }
+
+        // Initialize counts from localStorage
+        document.addEventListener('DOMContentLoaded', () => {
+            [1, 2, 3, 4, 5].forEach(storyId => {
+                const counts = getCounts(storyId);
+                document.getElementById(`like-count-${storyId}`).textContent = counts.likeCount;
+                document.getElementById(`dislike-count-${storyId}`).textContent = counts.dislikeCount;
+                document.getElementById(`share-count-${storyId}`).textContent = counts.shareCount;
+            });
+        });
+
+        // Like, dislike, and share functions
+        function likeStory(storyId) {
+            const counts = getCounts(storyId);
+            counts.likeCount += 1;
+            document.getElementById(`like-count-${storyId}`).textContent = counts.likeCount;
+            setCounts(storyId, counts);
+        }
+
+        function dislikeStory(storyId) {
+            const counts = getCounts(storyId);
+            counts.dislikeCount += 1;
+            document.getElementById(`dislike-count-${storyId}`).textContent = counts.dislikeCount;
+            setCounts(storyId, counts);
+        }
+
+        function shareStory(storyId) {
+            const counts = getCounts(storyId);
+            counts.shareCount += 1;
+            document.getElementById(`share-count-${storyId}`).textContent = counts.shareCount;
+            setCounts(storyId, counts);
+        }
+
+        // Read more toggle function
+        function toggleReadMore(storyId, element) {
+            const content = document.getElementById(storyId);
+            if (content.classList.contains('expanded')) {
+                content.classList.remove('expanded');
+                element.textContent = 'Read More';
+            } else {
+                content.classList.add('expanded');
+                element.textContent = 'Show Less';
+            }
+        }
+
+        // Post comment function (simplified, does not persist comments)
+        function postComment(storyId) {
+            const name = document.getElementById(`name${storyId}`).value;
+            const email = document.getElementById(`email${storyId}`).value;
+            const commentText = document.getElementById(`comment${storyId}`).value;
+            const commentsSection = document.getElementById(`comments-section${storyId}`);
+
+            if (name && email && commentText) {
+                const comment = document.createElement('div');
+                comment.classList.add('comment');
+                comment.innerHTML = `<strong>${name}</strong><p>${commentText}</p>`;
+                commentsSection.appendChild(comment);
+
+                document.getElementById(`name${storyId}`).value = '';
+                document.getElementById(`email${storyId}`).value = '';
+                document.getElementById(`comment${storyId}`).value = '';
+            } else {
+                alert('Please fill out all fields.');
+            }
+        }
+	 document.querySelector('.sidebar-toggle').addEventListener('click', function() {
+            document.querySelector('.sidebar').classList.toggle('open');
+        });
+// Search function
+        document.getElementById('searchInput').addEventListener('input', function() {
+            const query = this.value.toLowerCase();
+            const stories = document.querySelectorAll('.story-card, .highlight-card');
+            stories.forEach(story => {
+                const title = story.querySelector('h2').textContent.toLowerCase();
+                const description = story.querySelector('p').textContent.toLowerCase();
+                if (title.includes(query) || description.includes(query)) {
+                    story.style.display = '';
+                } else {
+                    story.style.display = 'none';
+                }
+            });
+        });
+
+    </script>
+</body>
+</html>

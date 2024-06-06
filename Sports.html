@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sports - NEWS WAVE</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #121212;
+            color: #E0E0E0;
+        }
+        header {
+            background: linear-gradient(90deg, #00C6FF, #0072FF);
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+            font-size: 2.5em;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        nav {
+            display: flex;
+            justify-content: center;
+            background-color: #222;
+            padding: 10px 0;
+        }
+        nav a {
+            color: white;
+            padding: 14px 20px;
+            text-decoration: none;
+            text-transform: uppercase;
+            transition: color 0.3s;
+            position: relative;
+        }
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background-color: #00C6FF;
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+        nav a:hover::after {
+            transform: scaleX(1);
+        }
+        nav a:hover {
+            color: #00C6FF;
+        }
+        .container {
+            padding: 20px;
+            max-width: 800px;
+            margin: auto;
+        }
+        .card {
+            background-color: #1E1E1E;
+            margin: 20px 0;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+        }
+        .card h2 {
+            margin-top: 0;
+            color: #00C6FF;
+        }
+        .card p {
+            color: #B0B0B0;
+            line-height: 1.6;
+        }
+        .read-more {
+            display: inline-block;
+            padding: 10px 15px;
+            margin-top: 10px;
+            color: white;
+            background-color: #00C6FF;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+        .read-more:hover {
+            background-color: #0072FF;
+        }
+        .collapse {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-out;
+        }
+        .expanded {
+            max-height: 1000px;
+            transition: max-height 0.5s ease-in;
+        }
+        footer {
+            background: linear-gradient(90deg, #00C6FF, #0072FF);
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+            border-top: 2px solid #00C6FF;
+        }
+        footer p {
+            font-size: 16px;
+        }
+        .comment-box-container {
+            background-color: #1E1E1E;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            margin-top: 20px;
+        }
+        .comment-box-container h2 {
+            color: #00C6FF;
+            text-align: center;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #B0B0B0;
+        }
+        .form-group input[type="text"],
+        .form-group input[type="email"],
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #444;
+            border-radius: 5px;
+            background-color: #333;
+            color: #E0E0E0;
+            font-size: 1em;
+        }
+        .post-button {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 5px;
+            background: linear-gradient(90deg, #00C6FF, #0072FF);
+            color: white;
+            font-size: 1.2em;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .post-button:hover {
+            background: linear-gradient(90deg, #0072FF, #00C6FF);
+        }
+        .comment {
+            background-color: #2C2C2C;
+            border: 1px solid #444;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+        .comment strong {
+            color: #00C6FF;
+        }
+        .comment p {
+            margin: 0;
+        }
+        .reply-button {
+            color: #00C6FF;
+            cursor: pointer;
+            font-size: 0.9em;
+            margin-top: 10px;
+            display: inline-block;
+        }
+        .reply-form {
+            display: none;
+            margin-top: 10px;
+        }
+        /* Styling for like and dislike buttons */
+        .like-dislike-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+        }
+        .like-dislike-buttons button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .like-dislike-buttons button:hover {
+            background-color: #00C6FF;
+            color: white;
+        }
+        .like-button i,
+        .dislike-button i {
+            margin-right: 5px;
+        }
+        .like-count, .dislike-count, .share-count {
+            margin-left: 10px;
+            font-size: 0.9em;
+        }
+        /* Styling for share button */
+        .share-button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            background-color: #1E1E1E;
+            color: white;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .share-button:hover {
+            background-color: #0072FF;
+        }    
+.sidebar-toggle {
+            font-size: 30px;
+            color: white;
+            background: none;
+            border: none;
+            position: absolute;
+            top: 15px;
+            left: 20px;
+            cursor: pointer;
+            z-index: 1001;
+        }
+        .sidebar-toggle:hover {
+            transform: rotate(90deg);
+        }
+        .search-bar {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            width: 300px;
+        }
+        .search-bar input[type="text"] {
+            width: 100%;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 20px;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+        .search-bar input[type="text"]:focus {
+            outline: none;
+            box-shadow: 0 0 10px #0072FF;
+        }
+	.sidebar {
+            position: fixed;
+            top: 0;
+            left: -100%;
+            width: 250px;
+            height: 100%;
+            background: linear-gradient(180deg, #1E1E1E, #121212);
+            color: #E0E0E0;
+            overflow-y: auto;
+            transition: left 0.5s ease, background 0.5s ease;
+            box-shadow: 4px 0 8px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+        }
+        .sidebar.open {
+            left: 0;
+        }
+        .sidebar-header {
+            padding: 20px;
+            background: #222;
+            font-size: 1.2em;
+            font-weight: bold;
+            text-align: center;
+            border-bottom: 1px solid #00C6FF;
+        }
+        .sidebar-menu ul, .sidebar-footer ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+        .sidebar-menu li, .sidebar-footer li {
+            padding: 16px 20px;
+            transition: background 0.3s, color 0.3s;
+        }
+        .sidebar-menu a, .sidebar-footer a {
+            color: #E0E0E0;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            transition: color 0.3s, background 0.3s, transform 0.3s;
+            position: relative;
+        }
+        .sidebar-menu a:hover, .sidebar-footer a:hover {
+            background: #00C6FF;
+            color: #121212;
+        }
+        .sidebar-menu a::before, .sidebar-footer a::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 0;
+            height: 3px;
+            background: #0072FF;
+            transition: width 0.3s ease;
+        }
+        .sidebar-menu a:hover::before, .sidebar-footer a:hover::before {
+            width: 100%;
+        }
+        .sidebar-menu a .icon, .sidebar-footer a .icon {
+            margin-right: 10px;
+        }
+        @media (max-width: 768px) {
+            .main-content {
+                flex-direction: column;
+            }
+            .content {
+                margin-left: 0;
+            }
+        }
+        @media (max-width: 480px) {
+            .sidebar {
+                width: 100%;
+            }
+        }
+
+    </style>
+</head>
+<body>
+    <header>
+        <h1>NEWS WAVE</h1>
+	<button class="sidebar-toggle">&#9776;</button>
+        <div class="search-bar">
+            <input type="text" id="searchInput" placeholder="Search...">
+        </div>
+    </header>
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="Sports.html">Sports</a>
+        <a href="Entertainment.html">Entertainment</a>
+        <a href="Contact us.html">Contact Us</a>
+        <a href="Health.html">Health</a>
+        <a href="Site history.html">Site History</a>
+    </nav>
+	<div class="sidebar">
+        <div class="sidebar-header">
+            <h2>Menu</h2>
+        </div>
+       
+      <div class="sidebar-menu">
+            <ul>
+                <li><a href="index.html"><i class="fas fa-home icon"></i>Home</a></li>
+                <li><a href="#"><i class="fas fa-bell icon"></i>Notifications</a></li>
+                <li><a href="Contact us.html"><i class="fab fa-instagram icon"></i>Message Us</a></li>
+            </ul>
+        </div>
+        <div class="sidebar-footer">
+            <ul>
+                <li><a href="About us.html">About us</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="card">
+            <h2>Sports Section</h2>
+            <p>Get the latest Sports news, Scores, Transfer news and Updates on games from all leagues</p>
+        </div>
+        <div class="card">
+            <h2>Malawi's National Football Team Qualifies for AFCON</h2>   
+            <img src="images/team.jpg" alt="team" style="display: block; margin: auto; width: 60%; border-radius: 10px;">
+            <div class="content">
+                <p class="story-summary">Malawi's national football team, the Flames, have qualified for the Africa Cup of Nations (AFCON) for the first time in 13 years. (May 10, 2024)</p>
+                <div class="collapse" id="story1">
+                    <p>The team's qualification was secured after a 2-1 win over Botswana in a thrilling match at the Kamuzu Stadium in Blantyre. The Flames' coach, Mario Marinica, praised the team's determination and hard work, saying, "This is a historic moment for Malawian football, and we're proud to have made it to AFCON."
+                    The qualification has sparked widespread celebrations across Malawi, with fans taking to social media to congratulate the team. 
+
+                    <br><br>
+                    The Flames will face stiff competition at AFCON, but their qualification is a testament to the team's growth and potential.
+                    Malawi's President, Lazarus Chakwera, has also congratulated the team, saying, "This achievement is not just for the football team, but for the entire nation. 
+
+                    <br><br>
+                    We're proud to see our team making us proud on the international stage."
+                    The Flames' qualification has also boosted the country's football development, with many young players looking up to the team as role models. The team's success is expected to inspire a new generation of footballers in Malawi.
+                    The Africa Cup of Nations is scheduled to take place in July, and the Flames will face off against some of the continent's top teams. 
+                    <br>
+                    Despite the tough competition, the team is confident and ready to make a mark on the international stage.
+                    </p>
+                    <div class="comment-box-container">
+                        <h2>Leave a Comment</h2>
+                        <div class="form-group">
+                            <label for="name1">Name:</label>
+                            <input type="text" id="name1" name="name">
+                        </div>
+                        <div class="form-group">
+                            <label for="email1">Email:</label>
+                            <input type="email" id="email1" name="email">
+                        </div>
+                        <div class="form-group">
+                            <label for="comment1">Comment:</label>
+                            <textarea id="comment1" name="comment" rows="5"></textarea>
+                        </div>
+                        <button class="post-button" onclick="postComment(1)">Post Comment</button>
+                        <div id="comments-section1"></div>
+                    </div>
+                </div>
+                <a href="javascript:void(0);" class="read-more" onclick="toggleReadMore('story1', this)">Read More</a>
+                <div class="like-dislike-buttons">
+                    <button class="like-button" onclick="likeStory(1)">
+                        <i class="fas fa-thumbs-up"></i> Like
+                        <span class="like-count" id="like-count-1">0</span>
+                    </button>
+                    <button class="dislike-button" onclick="dislikeStory(1)">
+                        <i class="fas fa-thumbs-down"></i> Dislike
+                        <span class="dislike-count" id="dislike-count-1">0</span>
+                    </button>
+                    <button class="share-button" onclick="shareStory()">
+                        <i class="fas fa-share"></i> Share
+                        <span class="share-count" id="share-count-1">0</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <h2>Malawi's Netball Team Wins Gold at Africa Championships</h2>
+            <img src="images/net.jpg" alt="net" style="display: block; margin: auto; width: 60%; border-radius: 10px;">
+            <div class="content">
+                <p class="story-summary">Malawi's national netball team, the Queens, have won gold at the 2024 Africa Netball Championships, defeating South Africa 54-53 in a thrilling final. </p>
+                <div class="collapse" id="story2">
+                    <p>The Queens' victory marks the team's first-ever gold medal at the championships and cements their position as a force to be reckoned with in African netball. The team's coach, Peace Chawinga-Kaluwa, praised the players for their hard work and dedication, saying, "This win is a testament to the team's commitment to excellence and their passion for the sport."
+                    The Queens' victory has sparked widespread celebrations across Malawi.
+
+                    <br><br>
+                    with fans taking to social media to congratulate the team. The team's success is a boost to netball development in Malawi and a source of national pride.
+                    The Africa Netball Championships brought together some of the continent's top teams, and the Queens' victory is a testament to their skill and determination. 
+
+                    <br><br>
+                    The team's success is expected to inspire a new generation of netballers in Malawi.
+                    The Queens' gold medal win has also earned them a spot at the 2024 Netball World Cup, where they will face off against some of the world's top teams. Despite the tough competition, the team is confident and ready to make a mark on the international stage.
+                    The Malawi Netball Association has also praised the team's achievement, saying, "This win is a historic moment for Malawian netball, and we're proud to see our team making us proud on the international stage."
+                    </p>
+                    <div class="comment-box-container">
+                        <h2>Leave a Comment</h2>
+                        <div class="form-group">
+                            <label for="name2">Name:</label>
+                            <input type="text" id="name2" name="name">
+                        </div>
+                        <div class="form-group">
+                            <label for="email2">Email:</label>
+                            <input type="email" id="email2" name="email">
+                        </div>
+                        <div class="form-group">
+                            <label for="comment2">Comment:</label>
+                            <textarea id="comment2" name="comment" rows="5"></textarea>
+                        </div>
+                        <button class="post-button" onclick="postComment(2)">Post Comment</button>
+                        <div id="comments-section2"></div>
+                    </div>
+                </div>
+                <a href="javascript:void(0);" class="read-more" onclick="toggleReadMore('story2', this)">Read More</a>
+                <div class="like-dislike-buttons">
+                    <button class="like-button" onclick="likeStory(2)">
+                        <i class="fas fa-thumbs-up"></i> Like
+                        <span class="like-count" id="like-count-2">0</span>
+                    </button>
+                    <button class="dislike-button" onclick="dislikeStory(2)">
+                        <i class="fas fa-thumbs-down"></i> Dislike
+                        <span class="dislike-count" id="dislike-count-2">0</span>
+                    </button>
+                    <button class="share-button" onclick="shareStory()">
+                        <i class="fas fa-share"></i> Share
+                        <span class="share-count" id="share-count-2">0</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <h2>LeBron James Becomes NBA's All-Time Leading Scorer</h2>
+            <img src="images/bron.jpg" alt="bron" style="display: block; margin: auto; width: 60%; border-radius: 10px;">
+            <div class="content">
+                <p class="story-summary">LeBron James has made history by becoming the NBA's all-time leading scorer, surpassing Kareem Abdul-Jabbar's record of 38,387 points.</p>
+                <div class="collapse" id="story3">
+                    <p>
+                    James, who plays for the Los Angeles Lakers, achieved the milestone in a game against the Oklahoma City Thunder, scoring 38 points to bring his total to 38,411. The achievement is a testament to James' incredible talent, work ethic, and longevity in the sport.
+                    James' record-breaking moment was met with a standing ovation from the crowd, and he was congratulated by Abdul-Jabbar himself. 
+
+                    <br><br>
+                    The NBA has also praised James' achievement, saying, "LeBron James is a once-in-a-generation player who has consistently pushed the boundaries of what's possible on the court."
+                    James' achievement has sparked widespread celebrations across the NBA, with many players and fans taking to social media to congratulate him.
+                    <br><br> 
+                    His record-breaking moment is a testament to his dedication to the sport and his legacy as one of the greatest basketball players of all time.
+                    The Los Angeles Lakers have also praised James' achievement, saying, "LeBron James is a true legend of the game, and we're honored to have him on our team.
+
+                    <br><br> 
+                    His record-breaking moment is a testament to his hard work and dedication to excellence."
+                    James' achievement has also sparked a new generation of basketball fans, with many young players looking up to him as a role model. His legacy is expected to continue inspiring and influencing the sport for years to come.
+                    </p>
+                    <div class="comment-box-container">
+                        <h2>Leave a Comment</h2>
+                        <div class="form-group">
+                            <label for="name3">Name:</label>
+                            <input type="text" id="name3" name="name">
+                        </div>
+                        <div class="form-group">
+                            <label for="email3">Email:</label>
+                            <input type="email" id="email3" name="email">
+                        </div>
+                        <div class="form-group">
+                            <label for="comment3">Comment:</label>
+                            <textarea id="comment3" name="comment" rows="5"></textarea>
+                        </div>
+                        <button class="post-button" onclick="postComment(3)">Post Comment</button>
+                        <div id="comments-section3"></div>
+                    </div>
+                </div>
+                <a href="javascript:void(0);" class="read-more" onclick="toggleReadMore('story3', this)">Read More</a>
+                <div class="like-dislike-buttons">
+                    <button class="like-button" onclick="likeStory(3)">
+                        <i class="fas fa-thumbs-up"></i> Like
+                        <span class="like-count" id="like-count-3">0</span>
+                    </button>
+                    <button class="dislike-button" onclick="dislikeStory(3)">
+                        <i class="fas fa-thumbs-down"></i> Dislike
+                        <span class="dislike-count" id="dislike-count-3">0</span>
+                    </button>
+                    <button class="share-button" onclick="shareStory()">
+                        <i class="fas fa-share"></i> Share
+                        <span class="share-count" id="share-count-3">0</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 News Wave. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+  // Utility function to get and set counts from localStorage
+        function getCounts(storyId) {
+            return JSON.parse(localStorage.getItem(`story-${storyId}`)) || { likeCount: 0, dislikeCount: 0, shareCount: 0 };
+        }
+
+        function setCounts(storyId, counts) {
+            localStorage.setItem(`story-${storyId}`, JSON.stringify(counts));
+        }
+
+        // Initialize counts from localStorage
+        document.addEventListener('DOMContentLoaded', () => {
+            [1, 2, 3, 4, 5].forEach(storyId => {
+                const counts = getCounts(storyId);
+                document.getElementById(`like-count-${storyId}`).textContent = counts.likeCount;
+                document.getElementById(`dislike-count-${storyId}`).textContent = counts.dislikeCount;
+                document.getElementById(`share-count-${storyId}`).textContent = counts.shareCount;
+            });
+        });
+
+        // Like, dislike, and share functions
+        function likeStory(storyId) {
+            const counts = getCounts(storyId);
+            counts.likeCount += 1;
+            document.getElementById(`like-count-${storyId}`).textContent = counts.likeCount;
+            setCounts(storyId, counts);
+        }
+
+        function dislikeStory(storyId) {
+            const counts = getCounts(storyId);
+            counts.dislikeCount += 1;
+            document.getElementById(`dislike-count-${storyId}`).textContent = counts.dislikeCount;
+            setCounts(storyId, counts);
+        }
+
+        function shareStory(storyId) {
+            const counts = getCounts(storyId);
+            counts.shareCount += 1;
+            document.getElementById(`share-count-${storyId}`).textContent = counts.shareCount;
+            setCounts(storyId, counts);
+        }
+
+        // Read more toggle function
+        function toggleReadMore(storyId, element) {
+            const content = document.getElementById(storyId);
+            if (content.classList.contains('expanded')) {
+                content.classList.remove('expanded');
+                element.textContent = 'Read More';
+            } else {
+                content.classList.add('expanded');
+                element.textContent = 'Show Less';
+            }
+        }
+
+        // Post comment function (simplified, does not persist comments)
+        function postComment(storyId) {
+            const name = document.getElementById(`name${storyId}`).value;
+            const email = document.getElementById(`email${storyId}`).value;
+            const commentText = document.getElementById(`comment${storyId}`).value;
+            const commentsSection = document.getElementById(`comments-section${storyId}`);
+
+            if (name && email && commentText) {
+                const comment = document.createElement('div');
+                comment.classList.add('comment');
+                comment.innerHTML = `<strong>${name}</strong><p>${commentText}</p>`;
+                commentsSection.appendChild(comment);
+
+                document.getElementById(`name${storyId}`).value = '';
+                document.getElementById(`email${storyId}`).value = '';
+                document.getElementById(`comment${storyId}`).value = '';
+            } else {
+                alert('Please fill out all fields.');
+            }
+        }
+	 document.querySelector('.sidebar-toggle').addEventListener('click', function() {
+            document.querySelector('.sidebar').classList.toggle('open');
+        });
+// Search function
+        document.getElementById('searchInput').addEventListener('input', function() {
+            const query = this.value.toLowerCase();
+            const stories = document.querySelectorAll('.story-card, .highlight-card');
+            stories.forEach(story => {
+                const title = story.querySelector('h2').textContent.toLowerCase();
+                const description = story.querySelector('p').textContent.toLowerCase();
+                if (title.includes(query) || description.includes(query)) {
+                    story.style.display = '';
+                } else {
+                    story.style.display = 'none';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
